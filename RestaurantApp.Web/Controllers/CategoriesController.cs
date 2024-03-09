@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RestaurantApp.Data.Data;
 using RestaurantApp.Data.Entities;
 using RestaurantApp.Services.Abstractions;
+using RestaurantApp.Services.DTOs;
 
 namespace RestaurantApp.Web.Controllers
 {
@@ -54,7 +55,7 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id")] Category category)
+        public async Task<IActionResult> Create([Bind("Name,Id")] CategoryDTO category)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +86,7 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Id")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Id")] CategoryDTO category)
         {
             if (id != category.Id)
             {

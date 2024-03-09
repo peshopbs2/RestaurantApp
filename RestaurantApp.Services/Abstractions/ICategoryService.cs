@@ -1,4 +1,5 @@
 ﻿using RestaurantApp.Data.Entities;
+using RestaurantApp.Services.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,11 @@ namespace RestaurantApp.Services.Abstractions
 {
     public interface ICategoryService
     {
-        //TODO: change entity to DTOs
-        Task<List<Category>> GetCategoriesAsync();
-        Task<Category> GetCategoryByIdAsync(int id);
-        Task<List<Category>> GetCategoryByNameAsync(string name);
-        Task AddCategoryAsync(Category category);
+        Task<List<CategoryDTO>> GetCategoriesAsync();
+        Task<CategoryDTO> GetCategoryByIdAsync(int id);
+        Task<List<CategoryDTO>> GetCategoryByNameAsync(string name);
+        Task AddCategoryAsync(CategoryDTO category);
         Task DeleteCategoryByIdAsync(int id);
-        Task UpdateCategoryAsync(Category category);
+        Task UpdateCategoryAsync(CategoryDTO category);
     }
 }

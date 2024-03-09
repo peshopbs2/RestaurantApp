@@ -21,6 +21,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
