@@ -20,6 +20,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
