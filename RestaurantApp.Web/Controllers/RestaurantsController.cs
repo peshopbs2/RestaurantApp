@@ -58,7 +58,7 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RestaurantDTO restaurant)
+        public async Task<IActionResult> Create(RestaurantCreateEditDTO restaurant)
         {
             if (ModelState.IsValid)
             {
@@ -76,11 +76,13 @@ namespace RestaurantApp.Web.Controllers
                 return NotFound();
             }
 
-            var restaurant = await _restaurantService.GetRestaurantByIdAsync(id.Value);
+            var restaurant = await _restaurantService
+                .GetRestaurantByIdEditAsync(id.Value);
             if (restaurant == null)
             {
                 return NotFound();
             }
+            ViewBag.Categories = await _categoryService.GetCategoriesAsync();
             return View(restaurant);
         }
 
@@ -89,7 +91,7 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,Address,PictureUrl,Phone,Website,Id")] RestaurantDTO restaurant)
+        public async Task<IActionResult> Edit(int id,RestaurantCreateEditDTO restaurant)
         {
             if (id != restaurant.Id)
             {

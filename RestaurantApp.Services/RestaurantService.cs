@@ -13,11 +13,11 @@ namespace RestaurantApp.Services
 {
     public class RestaurantService : IRestaurantService
     {
-        private readonly ICrudRepository<Restaurant> _restaurantRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
         private readonly ICrudRepository<Category>
             _categoryRepository;
         private readonly IMapper _mapper;
-        public RestaurantService(ICrudRepository<Restaurant> restaurantRepository,
+        public RestaurantService(IRestaurantRepository restaurantRepository,
             ICrudRepository<Category> categoryRepository,
             IMapper mapper)
         {
@@ -26,7 +26,7 @@ namespace RestaurantApp.Services
             _mapper = mapper;
         }
 
-        public async Task AddRestaurantAsync(RestaurantDTO model)
+        public async Task AddRestaurantAsync(RestaurantCreateEditDTO model)
         {
             var restaurant = _mapper.Map<Restaurant>(model);
 
@@ -49,6 +49,12 @@ namespace RestaurantApp.Services
             return _mapper.Map<RestaurantDTO>(restaurant);
         }
 
+        public async Task<RestaurantCreateEditDTO> GetRestaurantByIdEditAsync(int id)
+        {
+            var restaurant = await _restaurantRepository
+                .GetByIdAsync(id);
+            return _mapper.Map<RestaurantCreateEditDTO>(restaurant);
+        }
         public async Task<List<RestaurantDTO>> GetRestaurantByNameAsync(string name)
         {
             var restaurants = await _restaurantRepository.GetAsync(item => item.Name == name);
@@ -61,10 +67,17 @@ namespace RestaurantApp.Services
             return _mapper.Map<List<RestaurantDTO>>(restaurants);
         }
 
-        public async Task UpdateRestaurantAsync(RestaurantDTO model)
+        public async Task UpdateRestaurantAsync(RestaurantCreateEditDTO model)
         {
             var restaurant = _mapper.Map<Restaurant>(model);
-            await _restaurantRepository.UpdateAsync(restaurant);
+
+            var categories = model.CategoriesIds
+                .Select(item => _categoryRepository.GetByIdAsync(item).Result)
+                .ToList();
+
+            restaurant.Categories = categories;
+
+            await _restaurantRepository.UpdateRestaurant(restaurant);
         }
     }
 }

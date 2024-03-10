@@ -13,6 +13,8 @@ namespace RestaurantApp.Services.Profiles
     {
         public RestaurantProfile()
         {
+            CreateMap<Restaurant, RestaurantCreateEditDTO>()
+                .ReverseMap();
             CreateMap<Restaurant, RestaurantDTO>()
                 .ReverseMap();
         }

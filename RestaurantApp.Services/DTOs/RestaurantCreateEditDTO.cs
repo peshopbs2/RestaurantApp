@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantApp.Services.DTOs
 {
-    public class RestaurantDTO : BaseDTO
+    public class RestaurantCreateEditDTO : BaseDTO
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -14,6 +14,6 @@ namespace RestaurantApp.Services.DTOs
         public string PictureUrl { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
-        public List<CategoryDTO> Categories { get; set; }
+        public List<int> CategoriesIds { get; set; }
     }
 }

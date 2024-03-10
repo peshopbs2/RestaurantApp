@@ -11,9 +11,10 @@ namespace RestaurantApp.Services.Abstractions
     {
         Task<List<RestaurantDTO>> GetRestaurantsAsync();
         Task<RestaurantDTO> GetRestaurantByIdAsync(int id);
+        Task<RestaurantCreateEditDTO> GetRestaurantByIdEditAsync(int id);
         Task<List<RestaurantDTO>> GetRestaurantByNameAsync(string name);
-        Task AddRestaurantAsync(RestaurantDTO model);
+        Task AddRestaurantAsync(RestaurantCreateEditDTO model);
         Task DeleteRestaurantByIdAsync(int id);
-        Task UpdateRestaurantAsync(RestaurantDTO model);
+        Task UpdateRestaurantAsync(RestaurantCreateEditDTO model);
     }
 }
