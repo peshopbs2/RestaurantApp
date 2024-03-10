@@ -35,8 +35,6 @@ namespace RestaurantApp.Services
                 .ToList();
             restaurant.Categories = categories;
             await _restaurantRepository.AddAsync(restaurant);
-
-            
         }
 
         public async Task DeleteRestaurantByIdAsync(int id)
