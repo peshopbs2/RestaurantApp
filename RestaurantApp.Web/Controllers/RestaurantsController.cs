@@ -16,10 +16,12 @@ namespace RestaurantApp.Web.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly ICategoryService _categoryService;
 
-        public RestaurantsController(IRestaurantService restaurantService)
+        public RestaurantsController(IRestaurantService restaurantService, ICategoryService categoryService)
         {
             _restaurantService = restaurantService;
+            _categoryService = categoryService;
         }
 
         // GET: Restaurants
@@ -45,8 +47,9 @@ namespace RestaurantApp.Web.Controllers
         }
 
         // GET: Restaurants/Create
-        public IActionResult Create()
-        {
+        public async Task<IActionResult> Create()
+        {            
+            ViewBag.Categories = await _categoryService.GetCategoriesAsync();
             return View();
         }
 
@@ -55,7 +58,7 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Address,PictureUrl,Phone,Website,Id")] RestaurantDTO restaurant)
+        public async Task<IActionResult> Create(RestaurantDTO restaurant)
         {
             if (ModelState.IsValid)
             {

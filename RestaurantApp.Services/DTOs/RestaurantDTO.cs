@@ -14,5 +14,6 @@ namespace RestaurantApp.Services.DTOs
         public string PictureUrl { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
+        public List<int> CategoriesIds { get; set; }
     }
 }
