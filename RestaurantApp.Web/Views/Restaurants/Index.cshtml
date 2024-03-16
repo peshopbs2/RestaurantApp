@@ -14,7 +14,7 @@
     {
         <div class="card col-3 my-3 p-3 mx-3">
             <div>
-                <img class="img-thumbnail"  src="@item.PictureUrl" alt="@item.Name">
+                <img class="img-thumbnail"  src="~/uploads/@item.PictureUrl" alt="@item.Name">
             </div>
             <a class="nav-link" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
 

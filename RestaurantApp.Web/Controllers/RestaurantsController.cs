@@ -10,6 +10,8 @@ using RestaurantApp.Data.Entities;
 using RestaurantApp.Services;
 using RestaurantApp.Services.Abstractions;
 using RestaurantApp.Services.DTOs;
+using RestaurantApp.Web.Models;
+using RestaurantApp.Web.Utils;
 
 namespace RestaurantApp.Web.Controllers
 {
@@ -17,11 +19,13 @@ namespace RestaurantApp.Web.Controllers
     {
         private readonly IRestaurantService _restaurantService;
         private readonly ICategoryService _categoryService;
+        private readonly IWebHostEnvironment _environment;
 
-        public RestaurantsController(IRestaurantService restaurantService, ICategoryService categoryService)
+        public RestaurantsController(IRestaurantService restaurantService, ICategoryService categoryService, IWebHostEnvironment environment)
         {
             _restaurantService = restaurantService;
             _categoryService = categoryService;
+            _environment = environment;
         }
 
         // GET: Restaurants
@@ -48,7 +52,7 @@ namespace RestaurantApp.Web.Controllers
 
         // GET: Restaurants/Create
         public async Task<IActionResult> Create()
-        {            
+        {
             ViewBag.Categories = await _categoryService.GetCategoriesAsync();
             return View();
         }
@@ -58,10 +62,16 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RestaurantCreateEditDTO restaurant)
+        public async Task<IActionResult> Create(RestaurantCreateEditViewModel restaurant)
         {
             if (ModelState.IsValid)
             {
+                if (restaurant.Picture != null && restaurant.Picture.Length > 0)
+                {
+                    var newFileName = await FileUpload.UploadAsync(restaurant.Picture, _environment.WebRootPath);
+                    restaurant.PictureUrl = newFileName;
+                }
+
                 await _restaurantService.AddRestaurantAsync(restaurant);
                 return RedirectToAction(nameof(Index));
             }
@@ -83,7 +93,17 @@ namespace RestaurantApp.Web.Controllers
                 return NotFound();
             }
             ViewBag.Categories = await _categoryService.GetCategoriesAsync();
-            return View(restaurant);
+            return View(new RestaurantCreateEditViewModel()
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                Description = restaurant.Description,
+                Address = restaurant.Address,
+                PictureUrl = restaurant.PictureUrl,
+                Website = restaurant.Website,
+                Phone = restaurant.Phone,
+                CategoriesIds = restaurant.CategoriesIds
+            });
         }
 
         // POST: Restaurants/Edit/5
@@ -91,7 +111,7 @@ namespace RestaurantApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,RestaurantCreateEditDTO restaurant)
+        public async Task<IActionResult> Edit(int id, RestaurantCreateEditViewModel restaurant)
         {
             if (id != restaurant.Id)
             {
@@ -100,6 +120,12 @@ namespace RestaurantApp.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (restaurant.Picture != null && restaurant.Picture.Length > 0)
+                {
+                    var newFileName = await FileUpload.UploadAsync(restaurant.Picture, _environment.WebRootPath);
+                    restaurant.PictureUrl = newFileName;
+                }
+
                 try
                 {
                     await _restaurantService.UpdateRestaurantAsync(restaurant);
@@ -142,7 +168,7 @@ namespace RestaurantApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _restaurantService.DeleteRestaurantByIdAsync(id);  
+            await _restaurantService.DeleteRestaurantByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

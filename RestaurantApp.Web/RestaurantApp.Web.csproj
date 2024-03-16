@@ -26,4 +26,8 @@
     <ProjectReference Include="..\RestaurantApp.Services\RestaurantApp.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>
