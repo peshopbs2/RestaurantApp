@@ -1,4 +1,5 @@
-﻿using RestaurantApp.Data.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantApp.Data.Data;
 using RestaurantApp.Data.Entities;
 using RestaurantApp.Data.Repositories.Abstractions;
 using System;
@@ -18,9 +19,17 @@ namespace RestaurantApp.Data.Repositories
             _context = context;
         }
 
-        public async Task UpdateRestaurant(Restaurant restaurant)
+        public async Task UpdateRestaurant(Restaurant restaurant, List<Category> categories)
         {
-            //TODO: remove categories
+            _context.ChangeTracker.LazyLoadingEnabled = true;
+            _context.Restaurants.Attach(restaurant);
+
+            if (!_context.Entry(restaurant).Collection(r => r.Categories).IsLoaded)
+            {
+                await _context.Entry(restaurant).Collection(r => r.Categories).LoadAsync();
+            }
+            restaurant.Categories = categories;
+
             await UpdateAsync(restaurant);
         }
     }

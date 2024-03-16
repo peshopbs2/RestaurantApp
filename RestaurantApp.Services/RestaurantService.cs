@@ -46,6 +46,7 @@ namespace RestaurantApp.Services
         {
             var restaurant = await _restaurantRepository
                 .GetByIdAsync(id);
+            
             return _mapper.Map<RestaurantDTO>(restaurant);
         }
 
@@ -75,9 +76,7 @@ namespace RestaurantApp.Services
                 .Select(item => _categoryRepository.GetByIdAsync(item).Result)
                 .ToList();
 
-            restaurant.Categories = categories;
-
-            await _restaurantRepository.UpdateRestaurant(restaurant);
+            await _restaurantRepository.UpdateRestaurant(restaurant, categories);
         }
     }
 }

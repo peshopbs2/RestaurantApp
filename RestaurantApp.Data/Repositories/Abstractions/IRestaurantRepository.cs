@@ -9,6 +9,6 @@ namespace RestaurantApp.Data.Repositories.Abstractions
 {
     public interface IRestaurantRepository : ICrudRepository<Restaurant>
     {
-        public Task UpdateRestaurant(Restaurant restaurant);
+        public Task UpdateRestaurant(Restaurant restaurant, List<Category> categories);
     }
 }
